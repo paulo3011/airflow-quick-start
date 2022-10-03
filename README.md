@@ -20,3 +20,4 @@ docker-compose down
 - https://bobcares.com/blog/docker-exec-format-error/
 - https://docs.docker.com/compose/compose-file/compose-file-v3/
 - https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
+- https://github.com/apache/airflow/blob/v2-4-stable/IMAGES.rst
