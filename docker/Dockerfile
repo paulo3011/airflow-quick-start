@@ -1,5 +1,12 @@
-# seealso: https://airflow.apache.org/docs/docker-stack/build.html#build-build-image
+# seealso:
+# https://airflow.apache.org/docs/docker-stack/index.html
+# https://airflow.apache.org/docs/docker-stack/build.html#build-build-image
 
+# The Apache Airflow community, releases Docker Images which are reference images for Apache Airflow.
+# The community releases a production-ready reference container image
+# Every time a new version of Airflow is released, the images are prepared in the apache/airflow DockerHub for all the supported Python versions.
+# This repository uses an extending approach because the goal is to create a quick start
+# To see the pros and cons between extending and customizing see https://airflow.apache.org/docs/docker-stack/build.html#extending-vs-customizing-the-image
 FROM apache/airflow:2.4.0-python3.10 as dev_image
 
 # Adding a new PyPI package
