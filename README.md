@@ -21,3 +21,4 @@ docker-compose down
 - https://docs.docker.com/compose/compose-file/compose-file-v3/
 - https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
 - https://github.com/apache/airflow/blob/v2-4-stable/IMAGES.rst
+- https://airflowsummit.org/slides/j2-Ensuring-your-DAGs-work-before-going-to-production.pdf
