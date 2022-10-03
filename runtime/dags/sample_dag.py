@@ -5,9 +5,9 @@ from airflow.operators.empty import EmptyOperator
 
 default_args = {
     "owner": "airflow",
-    "start_date": datetime(2022, 9, 26),
+    "start_date": datetime(2022, 10, 2),
     "depends_on_past": False,
-    "retries": 1,
+    "retries": 0,
     "retry_delay": timedelta(minutes=5),
     "email_on_retry": False
 }
@@ -17,8 +17,9 @@ dag = DAG("sample_dag",
           description="Sample dag.",
           # https://crontab.guru/#0_3_*_*_*
           # schedule="0 3 * * *",
-          schedule=None,
-          catchup=False
+          schedule="0 1 * * *",
+          catchup=False,
+          start_date=default_args["start_date"]
           )
 
 start_operator = EmptyOperator(task_id="Begin_execution", dag=dag)
@@ -29,12 +30,13 @@ start_operator >> end_operator
 
 def debug_dag(dag: DAG, use_default_executor=False):
     """Debug a DAG in with DebugExecutor not needing to change airflow.cfg."""
-    # Caution: remove missing tasks manually in website
-    # dag.clear()
+    dag.clear()
+
     if use_default_executor:
         dag.run()
     else:
         dag.run(executor=DebugExecutor())
+
 
 if __name__ == "__main__":
     from airflow.utils.state import State
