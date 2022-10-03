@@ -16,6 +16,7 @@ services:
       - "5432:5432"
     networks:
       - airflow_quick_net
+
   airflow-quick-srv:
     container_name: airflow-quick
     build:
@@ -28,12 +29,51 @@ services:
     # and start all components for you.
     command: ["airflow", "standalone"]
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
       - postgres
     env_file:
       - airflow-env-variables.env
     ports:
       - "81:8080"
+    volumes:
+      - type: bind
+        source: ../runtime/dags
+        target: /opt/airflow/dags
+      - type: bind
+        source: ../runtime/logs
+        target: /opt/airflow/logs
+      - type: bind
+        source: ../runtime/plugins
+        target: /opt/airflow/plugins
+      - type: bind
+        source: ../runtime/tests
+        target: /opt/airflow/tests
+    networks:
+      - airflow_quick_net
+
+  airflow-pycharm-interpreter:
+    container_name: airflow-quick-interpreter
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: dev_image
+    # entrypoint: ["/pycharm-interpreter.sh"]
+    # start a trigger process to allow webservice run along side with pycharm interpreter
+    # https://airflow.apache.org/docs/apache-airflow/stable/concepts/deferring.html#using-deferrable-operators
+    command: ["triggerer"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_started
+      airflow-quick-srv:
+        condition: service_healthy
+    env_file:
+      - airflow-env-variables.env
     volumes:
       - type: bind
         source: ../runtime/dags
