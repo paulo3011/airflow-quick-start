@@ -8,6 +8,10 @@ from airflow.operators.bash import BashOperator
 from airflow.utils.state import DagRunState, TaskInstanceState
 from airflow.utils.types import DagRunType
 
+import os
+
+# os.environ["AIRFLOW__DATABASE__SQL_ALCHEMY_CONN"] = "postgresql+psycopg2://airflow:airflow@localhost:5432/airflow"
+# os.environ["AIRFLOW__CORE__SQL_ALCHEMY_CONN"] = os.environ["AIRFLOW__DATABASE__SQL_ALCHEMY_CONN"]
 
 class SampleDagTest(unittest.TestCase):
     """
@@ -18,7 +22,8 @@ class SampleDagTest(unittest.TestCase):
 
     def setUp(self) -> None:
         self.dag_bag = DagBag()
-        self._clear_dag(self.dag_id)
+        # env = os.environ.get("AIRFLOW__DATABASE__SQL_ALCHEMY_CONN")
+        # self._clear_dag(self.dag_id)
 
     def _getDag(self) -> DAG:
         return self.dag_bag.get_dag(dag_id=self.dag_id)
@@ -43,15 +48,18 @@ class SampleDagTest(unittest.TestCase):
         data_interval_start = pendulum.datetime(2022, 9, 14, tz="UTC")
         data_interval_end = data_interval_start + datetime.timedelta(days=1)
 
-        dagrun = dag.create_dagrun(
-            state=DagRunState.RUNNING,
-            execution_date=data_interval_start,
-            data_interval=(data_interval_start, data_interval_end),
-            start_date=data_interval_end,
-            run_type=DagRunType.MANUAL,
-            run_id=f'test_{pendulum.now().isoformat()}',
-            external_trigger=True
-        )
+        try:
+            dagrun = dag.create_dagrun(
+                state=DagRunState.RUNNING,
+                execution_date=data_interval_start,
+                data_interval=(data_interval_start, data_interval_end),
+                start_date=data_interval_end,
+                run_type=DagRunType.MANUAL,
+                run_id=f'test_{pendulum.now().isoformat()}',
+                external_trigger=True
+            )
+        except:
+            print("Dag run already exists!")
 
         task = dag.get_task(task_id="Begin_execution")
         ti = TaskInstance(task, data_interval_start)

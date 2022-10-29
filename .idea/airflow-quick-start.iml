@@ -5,8 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$/runtime/dags" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/runtime/plugins" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/runtime/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Remote Python 3.10.7 Docker Compose (airflow-pycharm-interpreter)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (airflow-quick-start)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
